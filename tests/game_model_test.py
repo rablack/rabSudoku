@@ -33,4 +33,4 @@ class TestBoardType(unittest.TestCase):
 		self.assertEqual(defaultBoardSize, defaultBoard.getBoardYSize())
 
 if __name__ == "__main__":
-	unittest.main()
+    unittest.main()
