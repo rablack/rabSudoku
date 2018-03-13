@@ -53,7 +53,7 @@ class TestCsvLineParser(unittest.TestCase):
         basic_3rd = self.parser.parseField(basic, basic_2nd[0])
         
         self.assertEqual("4", basic_3rd[1])
-        self.assertEqual(7, basic_3rd[0])
+        self.assertEqual(-1, basic_3rd[0])
         
         quoted = '"Hello ""World""","Contains ,",""'
         
@@ -70,7 +70,7 @@ class TestCsvLineParser(unittest.TestCase):
         quoted_3rd = self.parser.parseField(quoted, quoted_2nd[0])
         
         self.assertEqual('', quoted_3rd[1])
-        self.assertEqual(33, quoted_3rd[0])
+        self.assertEqual(-1, quoted_3rd[0])
         
     def testParseFieldInvalid(self):
         """
@@ -103,6 +103,24 @@ class TestCsvLineParser(unittest.TestCase):
         self.assertEqual(',', quoted_fields[2])
         self.assertEqual('', quoted_fields[3])
         self.assertEqual(4, len(quoted_fields))
+        
+    def testEmptyFinalField(self):
+        """
+        Test for issue #1
+        
+        CsvLineParser should handle the case where the final field is empty.
+        This should result in an empty field in the output.
+        """
+        empty_final = '1,2,'
+        empty_final_fields = self.parser.parseLine(empty_final)
+        self.assertEqual(3, len(empty_final_fields))
+        self.assertEqual('', empty_final_fields[2])
+        
+        empty_line = ''
+        empty_fields = self.parser.parseLine(empty_line)
+        
+        self.assertEqual(1, len(empty_fields))
+        self.assertEqual('', empty_fields[0])
         
 
 if __name__ == "__main__":

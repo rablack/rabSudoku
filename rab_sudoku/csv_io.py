@@ -13,16 +13,30 @@ class CsvLineParser:
         self.__separator = ','
         
     def parseLine(self, line):
+        """
+        Parse a CSV line into fields
+        - line - String containing the CSV to parse
+        Returns
+        - sequence containing the parsed fields
+        """
         parse_pos = 0
         fields = []
-        while parse_pos < len(line):
+        while parse_pos != -1:
             parse_pos, field = self.parseField(line, parse_pos)
             fields.append(field)
         return fields
         
     def parseField(self, line, field_pos):
+        """
+        Parse a field from a CSV line
+        - line - String containing the field to be parsed
+        - field_pos - int start position of the field
+        Returns
+        - parse_pos - int start of the next field or -1 if there are no more
+        - field - String containing the parsed field
+        """
         parse_pos = field_pos
-        quoted_field = (line[field_pos] == self.__quote_char)
+        quoted_field = line.startswith(self.__quote_char, field_pos)
         fieldBuilderList = []
         
         if quoted_field:
@@ -39,6 +53,7 @@ class CsvLineParser:
                 
                 if parse_pos == len(line):
                     # End of line
+                    parse_pos = -1
                     break
                 elif line[parse_pos] == self.__separator:
                     # End of field. Consume the separator
@@ -56,7 +71,7 @@ class CsvLineParser:
             if end_pos == -1:
                 # Last field of line
                 fieldBuilderList += line[parse_pos:]
-                parse_pos = len(line)
+                parse_pos = -1
             else:
                 # Field ending in separator
                 fieldBuilderList += line[parse_pos:end_pos]
