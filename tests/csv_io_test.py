@@ -71,6 +71,39 @@ class TestCsvLineParser(unittest.TestCase):
         
         self.assertEqual('', quoted_3rd[1])
         self.assertEqual(33, quoted_3rd[0])
+        
+    def testParseFieldInvalid(self):
+        """
+        Test for known invalid input:
+        
+        - Fields only part quoted
+        - Unterminated quotes
+        """
+        pass
+        
+    def testParseLine(self):
+        """
+        Test the parsing of CSV lines
+        """
+        basic_line = '1,,3  ,4'
+        basic_fields = self.parser.parseLine(basic_line)
+        
+        self.assertEqual('1', basic_fields[0])
+        self.assertEqual('', basic_fields[1])
+        self.assertEqual('3  ', basic_fields[2])
+        self.assertEqual('4', basic_fields[3])
+        self.assertEqual(4, len(basic_fields))
+        
+        
+        quoted_line = '"Hello","""World""",",",""'
+        quoted_fields = self.parser.parseLine(quoted_line)
+        
+        self.assertEqual('Hello', quoted_fields[0])
+        self.assertEqual('"World"', quoted_fields[1])
+        self.assertEqual(',', quoted_fields[2])
+        self.assertEqual('', quoted_fields[3])
+        self.assertEqual(4, len(quoted_fields))
+        
 
 if __name__ == "__main__":
     unittest.main()
