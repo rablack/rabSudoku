@@ -12,12 +12,13 @@ class CsvLineParser:
         self.__quote_char = '"'
         self.__separator = ','
         
+        
     def parseLine(self, line):
         """
         Parse a CSV line into fields
         - line - String containing the CSV to parse
         Returns
-        - sequence containing the parsed fields
+        - Sequence containing the parsed fields
         """
         parse_pos = 0
         fields = []
@@ -25,6 +26,7 @@ class CsvLineParser:
             parse_pos, field = self.parseField(line, parse_pos)
             fields.append(field)
         return fields
+        
         
     def parseField(self, line, field_pos):
         """
@@ -78,6 +80,9 @@ class CsvLineParser:
                 parse_pos = end_pos + 1;
             
         return parse_pos, "".join(fieldBuilderList)
+        
+        
+        
         
 class CsvModelReader:
     """
