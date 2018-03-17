@@ -17,3 +17,5 @@ class BoardType:
 		
 	def getBoardYSize(self):
 		return self.__ySize * self.__xSize
+		
+		
